@@ -39,7 +39,15 @@ jobs:
 
       - name: Run tests
         run: |
+          # Run pytest, but don't fail if no tests are found (exit code 5)
           pytest -q
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -eq 5 ]; then
+            echo "No tests found - this is okay"
+            exit 0
+          else
+            exit $EXIT_CODE
+          fi
 
       - name: Upload pytest results (if any)
         if: always()
