@@ -12,8 +12,14 @@ import sys
 import os
 
 # Add project paths
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
-sys.path.insert(0, os.path.join(project_root, 'part1-data-model'))
+# Get the directory where this file is located
+current_file = os.path.abspath(__file__)
+current_dir = os.path.dirname(current_file)
+# Go up to project root: part3-dashboard/dashboard -> part3-dashboard -> project root
+project_root = os.path.abspath(os.path.join(current_dir, '../..'))
+# Add part1-data-model to path
+part1_path = os.path.join(project_root, 'part1-data-model')
+sys.path.insert(0, part1_path)
 
 from data_simulation.wearables import WearableSimulator
 from data_simulation.air_quality import EnvironmentalSimulator

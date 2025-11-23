@@ -33,3 +33,8 @@ Thumbs.db
 data/
 *.csv
 *.parquet
+
+
+PRESENTATION_GUIDE.md
+DEMO_SCRIPT.md
+QUICK_START.md
