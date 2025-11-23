@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: health-risk-mlops
+  labels:
+    name: health-risk-mlops
+

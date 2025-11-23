@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: retraining-job
+  namespace: health-risk-mlops
+spec:
+  template:
+    spec:
+      containers:
+      - name: retraining
+        image: health-risk-federated:latest
+        imagePullPolicy: Never
+        command: ["python", "part2-mlops/mlops/retraining_pipeline.py"]
+        args: ["--mode", "drift", "--reference-date", "2024-01-14"]
+        env:
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            configMapKeyRef:
+              name: mlops-config
+              key: MLFLOW_TRACKING_URI
+        - name: DRIFT_THRESHOLD
+          valueFrom:
+            configMapKeyRef:
+              name: mlops-config
+              key: DRIFT_THRESHOLD
+        - name: PYTHONPATH
+          value: "/app"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      restartPolicy: Never
+  backoffLimit: 3
+

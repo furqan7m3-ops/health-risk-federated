@@ -16,8 +16,10 @@ services:
       dockerfile: part2-mlops/docker/Dockerfile.server
     depends_on:
       - mlflow
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
     ports:
-      - "8080:8080"
+      - "5050:5050"
 
   client01:
     build:
@@ -25,8 +27,11 @@ services:
       dockerfile: part2-mlops/docker/Dockerfile.client
     environment:
       - CLIENT_ID=01
+      - SERVER_ADDRESS=server:5050
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
     depends_on:
       - server
+      - mlflow
 
   client02:
     build:
@@ -34,8 +39,21 @@ services:
       dockerfile: part2-mlops/docker/Dockerfile.client
     environment:
       - CLIENT_ID=02
+      - SERVER_ADDRESS=server:5050
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
     depends_on:
       - server
+      - mlflow
+  inference:
+    build:
+      context: ../..
+      dockerfile: part2-mlops/docker/Dockerfile.inference
+    depends_on:
+      - mlflow
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    ports:
+      - "8080:8080"
 
   prometheus:
     image: prom/prometheus:latest

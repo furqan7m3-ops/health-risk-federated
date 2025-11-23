@@ -39,8 +39,10 @@ if __name__ == "__main__":
         start_server(num_rounds=10, min_clients=2, port=5050)  # Fewer rounds for testing
     elif mode == "client":
         cid = sys.argv[2]
+        server_address = os.getenv("SERVER_ADDRESS", "127.0.0.1:5050")
         print(f"🚀 Starting client {cid}...")
+        print(f"🔗 Connecting to server at {server_address}")
         fl.client.start_client(
-            server_address=f"127.0.0.1:5050",
+            server_address=server_address,
             client=create_client(cid)
         )

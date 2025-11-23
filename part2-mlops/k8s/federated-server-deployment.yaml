@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: federated-server
+  namespace: health-risk-mlops
+  labels:
+    app: federated-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: federated-server
+  template:
+    metadata:
+      labels:
+        app: federated-server
+    spec:
+      containers:
+      - name: server
+        image: health-risk-federated:latest
+        imagePullPolicy: Never  # Use local image for development
+        command: ["python", "part1-data-model/run_federated.py", "server"]
+        ports:
+        - containerPort: 5050
+        env:
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            configMapKeyRef:
+              name: mlops-config
+              key: MLFLOW_TRACKING_URI
+        - name: PYTHONPATH
+          value: "/app"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: federated-server-service
+  namespace: health-risk-mlops
+spec:
+  selector:
+    app: federated-server
+  ports:
+  - protocol: TCP
+    port: 5050
+    targetPort: 5050
+  type: ClusterIP
+

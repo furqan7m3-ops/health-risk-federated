@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'federated-server'
+    static_configs:
+      - targets: ['server:5050']
+
+  - job_name: 'inference-service'
+    static_configs:
+      - targets: ['inference:8080']
+
+  - job_name: 'mlflow'
+    static_configs:
+      - targets: ['mlflow:5000']
+

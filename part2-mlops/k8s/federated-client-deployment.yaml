@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: federated-client-01
+  namespace: health-risk-mlops
+  labels:
+    app: federated-client
+    client-id: "01"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: federated-client
+      client-id: "01"
+  template:
+    metadata:
+      labels:
+        app: federated-client
+        client-id: "01"
+    spec:
+      containers:
+      - name: client
+        image: health-risk-federated:latest
+        imagePullPolicy: Never
+        command: ["python", "part1-data-model/run_federated.py", "client", "01"]
+        env:
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            configMapKeyRef:
+              name: mlops-config
+              key: MLFLOW_TRACKING_URI
+        - name: SERVER_ADDRESS
+          value: "federated-server-service:5050"
+        - name: PYTHONPATH
+          value: "/app"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: federated-client-02
+  namespace: health-risk-mlops
+  labels:
+    app: federated-client
+    client-id: "02"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: federated-client
+      client-id: "02"
+  template:
+    metadata:
+      labels:
+        app: federated-client
+        client-id: "02"
+    spec:
+      containers:
+      - name: client
+        image: health-risk-federated:latest
+        imagePullPolicy: Never
+        command: ["python", "part1-data-model/run_federated.py", "client", "02"]
+        env:
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            configMapKeyRef:
+              name: mlops-config
+              key: MLFLOW_TRACKING_URI
+        - name: SERVER_ADDRESS
+          value: "federated-server-service:5050"
+        - name: PYTHONPATH
+          value: "/app"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+

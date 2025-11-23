@@ -1,0 +1,26 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and add FastAPI for serving
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt fastapi uvicorn prometheus-client
+
+# Copy application code
+COPY part1-data-model/ ./part1-data-model/
+COPY part2-mlops/ ./part2-mlops/
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+# Expose inference API port
+EXPOSE 8080
+
+# Run inference server
+CMD ["python", "part2-mlops/mlops/inference_server.py"]
+
