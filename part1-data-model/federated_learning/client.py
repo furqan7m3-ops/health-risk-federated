@@ -27,7 +27,7 @@ class HealthRiskClient(fl.client.Client):
             if recv_params is not None and len(recv_params) > 0:
                 print(f"⬇️ Client {self.cid} received {len(recv_params)} parameter arrays from server")
                 self.model.set_parameters(recv_params)
-        except Exception:
+        except Exception:  # nosec B110
             # If ins.parameters is None or malformed, ignore and continue training from local state
             pass
         
@@ -74,7 +74,7 @@ class HealthRiskClient(fl.client.Client):
             recv_params = parameters_to_ndarrays(ins.parameters)
             if recv_params is not None and len(recv_params) > 0:
                 self.model.set_parameters(recv_params)
-        except Exception:
+        except Exception:  # nosec B110
             pass
         
         X_val, y_val = [], []

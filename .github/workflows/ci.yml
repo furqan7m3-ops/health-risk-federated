@@ -32,6 +32,9 @@ jobs:
 
       - name: Run security scan (bandit)
         run: |
+          # Run bandit security scan
+          # Issues marked with # nosec are automatically ignored
+          # -n 5: Show top 5 issues per file
           bandit -r . -n 5
 
       - name: Run tests

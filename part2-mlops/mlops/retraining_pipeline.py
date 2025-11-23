@@ -4,7 +4,6 @@ Triggers re-training when drift is detected or on schedule
 """
 import os
 import sys
-import subprocess
 import mlflow
 import mlflow.sklearn
 from datetime import datetime
